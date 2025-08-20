@@ -1,0 +1,110 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 30px;
+  background: #f8f8f8;
+}
+
+h1 {
+  color: #232f3e;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+}
+
+input, textarea, button {
+  padding: 10px;
+  font-size: 14px;
+}
+
+button {
+  background: #ff9900;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #e68a00;
+}
+
+#response {
+  margin-top: 20px;
+  font-weight: bold;
+  color: green;
+}
+/* Floating button */
+#supportBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #007185;
+  color: #fff;
+  font-size: 24px;
+  padding: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+/* Overlay */
+#supportOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.hidden { display: none !important; }
+
+/* Support box */
+.support-box {
+  width: 90%;
+  max-width: 400px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.support-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.support-header h3 { margin: 0; font-size: 18px; }
+.support-header button {
+  background: none; border: none;
+  font-size: 20px; cursor: pointer;
+}
+
+#supportForm input,
+#supportForm textarea {
+  width: 100%; padding: 12px; margin-bottom: 12px;
+  border: 1px solid #ccc; border-radius: 8px; font-size: 14px;
+}
+
+#supportForm button {
+  width: 100%; padding: 12px;
+  border: none; border-radius: 8px;
+  background: #febd69;
+  font-size: 16px; font-weight: bold;
+  cursor: pointer;
+}
+
+#supportForm button:hover { background: #f3a847; }
+#supportMsg { margin-top: 10px; font-size: 14px; color: green; text-align: center; }
+
+@media (max-width: 600px) {
+  .support-box { width: 95%; padding: 15px; }
+}

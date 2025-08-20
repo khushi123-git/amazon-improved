@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart with Support</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Floating button */
+    #supportBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      font-size: 18px;
+    }
+    #supportBtn:hover {
+      background: #e33;
+    }
+
+    /* Overlay */
+    #supportOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    #supportOverlay.hidden {
+      display: none;
+    }
+
+    /* Support box */
+    .support-box {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0 0 15px rgba(255,0,0,0.4);
+      position: relative;
+    }
+    .support-box h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #ff4444;
+    }
+    .support-box label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    .support-box input,
+    .support-box textarea {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .support-box button {
+      width: 100%;
+      padding: 10px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .support-box button:hover {
+      background: #e33;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      color: #fff;
+      cursor: pointer;
+    }
+    .msg {
+      margin-top: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center; padding:20px;">🛒 Your Cart Page</h1>
+
+  <!-- Floating Button -->
+  <button id="supportBtn">💬</button>
+
+  <!-- Overlay -->
+  <div id="supportOverlay" class="hidden">
+    <div class="support-box">
+      <span id="closeSupport" class="close-btn">&times;</span>
+      <h2>Support</h2>
+      <form id="supportForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="query">Your Query:</label>
+        <textarea id="query" rows="4" required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+      <div id="supportMsg" class="msg"></div>
+    </div>
+  </div>
+
+  <!-- Supabase client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://purnzijebomdwovbfdfm.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1cm56aWplYm9tZHdvdmJmZGZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NjE1NzIsImV4cCI6MjA3MTIzNzU3Mn0.h1LvV809SveKq6WU30SPbL3lmx1KYs7RiKnucKcoIpQ";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const supportBtn = document.getElementById("supportBtn");
+      const supportOverlay = document.getElementById("supportOverlay");
+      const closeBtn = document.getElementById("closeSupport");
+      const form = document.getElementById("supportForm");
+      const msgBox = document.getElementById("supportMsg");
+
+      // Show overlay
+      supportBtn.addEventListener("click", () => {
+        supportOverlay.classList.remove("hidden");
+        msgBox.innerText = "";
+      });
+
+      // Close overlay
+      closeBtn.addEventListener("click", () => {
+        supportOverlay.classList.add("hidden");
+      });
+
+      // Handle form submit
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value.trim();
+        const query = document.getElementById("query").value.trim();
+
+        let { error } = await supabaseClient
+          .from("support_queries")
+          .insert([{ name, query }]);
+
+        if (error) {
+          msgBox.innerText = "❌ " + error.message;
+        } else {
+          msgBox.innerText = "✅ Query submitted!";
+          form.reset();
+
+          // Auto close overlay after 2s
+          setTimeout(() => {
+            supportOverlay.classList.add("hidden");
+          }, 2000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
